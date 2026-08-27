@@ -30,5 +30,4 @@ replay_pid*
 .env.*.local
 
 # Dont commit the target when when using maven
-backend/target/
-
+/backend/target
