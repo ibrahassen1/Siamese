@@ -3,14 +3,12 @@ spring:
     name: backend
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/siamese
-    username: siamese
-    password: siamese_dev
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    hibernate:
-      ddl-auto: none
     open-in-view: false
 
   flyway:
