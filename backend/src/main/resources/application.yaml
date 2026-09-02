@@ -15,3 +15,6 @@ spring:
 
   flyway:
     enabled: true
+
+market-data:
+  api-key: ${MARKET_DATA_API_KEY}
