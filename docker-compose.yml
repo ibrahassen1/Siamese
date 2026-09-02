@@ -4,9 +4,9 @@ services:
     container_name: siamese-postgres
 
     environment:
-      POSTGRES_DB: siamese
-      POSTGRES_USER: siamese
-      POSTGRES_PASSWORD: siamese_dev
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     ports:
       - "5433:5432"
@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U siamese -d siamese"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
