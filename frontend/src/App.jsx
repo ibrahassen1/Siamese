@@ -1,60 +1,113 @@
 import {
-  Show,
   SignIn,
   SignUp,
   SignOutButton,
   UserButton,
+  useAuth,
 } from '@clerk/react'
 
-function App() {
-  const path = window.location.pathname
+import {
+  Routes,
+  Route,
+  Navigate,
+  Link,
+} from 'react-router'
 
-  if (path === '/sign-in' || path.startsWith('/sign-in/')) {
-    return (
-      <main>
-        <SignIn path="/sign-in" />
-      </main>
-    )
+function ProtectedRoute({ children }) {
+  const { isLoaded, isSignedIn } = useAuth()
+
+  if (!isLoaded) {
+    return <p>Loading...</p>
   }
 
-  if (path === '/sign-up' || path.startsWith('/sign-up/')) {
-    return (
-      <main>
-        <SignUp path="/sign-up" />
-      </main>
-    )
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" replace />
   }
+
+  return children
+}
+
+function Home() {
+  const { isSignedIn } = useAuth()
 
   return (
     <main>
-      <Show when="signed-out">
-        <h1>Welcome to Siamese</h1>
+      <h1>Welcome to Siamese</h1>
 
-        <p>
-          <a href="/sign-in">Log in</a>
-        </p>
+      {isSignedIn ? (
+        <Link to="/dashboard">Go to Dashboard</Link>
+      ) : (
+        <>
+          <p>
+            <Link to="/sign-in">Log in</Link>
+          </p>
 
-        <p>
-          <a href="/sign-up">Create account</a>
-        </p>
-      </Show>
-
-      <Show when="signed-in">
-        <h1>Siamese Dashboard</h1>
-
-        <p>You are logged in.</p>
-
-        <UserButton />
-
-        <div>
-          <SignOutButton>
-            <button type="button">
-              Log out
-            </button>
-          </SignOutButton>
-        </div>
-      </Show>
+          <p>
+            <Link to="/sign-up">Create account</Link>
+          </p>
+        </>
+      )}
     </main>
+  )
+}
+
+function Dashboard() {
+  return (
+    <main>
+      <h1>Siamese Dashboard</h1>
+
+      <p>You are authenticated.</p>
+
+      <UserButton />
+
+      <br />
+      <br />
+
+      <SignOutButton>
+        <button type="button">Log out</button>
+      </SignOutButton>
+    </main>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+
+      <Route
+        path="/sign-in/*"
+        element={
+          <SignIn
+            path="/sign-in"
+            routing="path"
+            fallbackRedirectUrl="/dashboard"
+          />
+        }
+      />
+
+      <Route
+        path="/sign-up/*"
+        element={
+          <SignUp
+            path="/sign-up"
+            routing="path"
+            fallbackRedirectUrl="/dashboard"
+          />
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
