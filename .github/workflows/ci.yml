@@ -31,6 +31,7 @@ jobs:
       DB_URL: jdbc:postgresql://localhost:5432/siamese
       DB_USERNAME: siamese
       DB_PASSWORD: siamese_dev
+      MARKET_DATA_API_KEY: test-key
 
     steps:
       - name: Checkout repository
@@ -46,5 +47,3 @@ jobs:
       - name: Build and test backend
         working-directory: backend
         run: mvn -B clean verify
-
-
