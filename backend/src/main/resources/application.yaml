@@ -1,4 +1,4 @@
-spring:
+\spring:
   application:
     name: backend
 
@@ -15,6 +15,12 @@ spring:
 
   flyway:
     enabled: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLERK_ISSUER_URI}
 
 market-data:
   api-key: ${MARKET_DATA_API_KEY}
