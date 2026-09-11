@@ -1,0 +1,4 @@
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    clerk_user_id VARCHAR(255) NOT NULL UNIQUE
+);
