@@ -28,23 +28,30 @@ function ProtectedRoute({ children }) {
 }
 
 function Home() {
-  const { isSignedIn } = useAuth()
+  const { isLoaded, isSignedIn } = useAuth()
+
+  if (!isLoaded) {
+    return <p>Loading...</p>
+  }
 
   return (
     <main>
-      <h1>Welcome to Siamese</h1>
+      <h1>Siamese</h1>
 
       {isSignedIn ? (
-        <Link to="/dashboard">Go to Dashboard</Link>
+        <>
+          <p>You are signed in.</p>
+          <Link to="/dashboard">Go to Dashboard</Link>
+        </>
       ) : (
         <>
-          <p>
-            <Link to="/sign-in">Log in</Link>
-          </p>
+          <p>Practice investing without risking real money.</p>
 
-          <p>
-            <Link to="/sign-up">Create account</Link>
-          </p>
+          <Link to="/sign-in">Sign In</Link>
+
+          <br />
+
+          <Link to="/sign-up">Create Account</Link>
         </>
       )}
     </main>

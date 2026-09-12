@@ -1,4 +1,4 @@
-   package com.siamese.backend.user;
+package com.siamese.backend.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
