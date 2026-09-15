@@ -7,6 +7,8 @@ import {
   useAuth,
 } from '@clerk/react'
 
+import { useEffect, useState } from 'react'
+
 import {
   Routes,
   Route,
@@ -60,6 +62,51 @@ function Home() {
 }
 
 function Dashboard() {
+  const { getToken } = useAuth()
+
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const token = await getToken()
+
+        const response = await fetch(
+          'http://localhost:8080/api/users/me',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        setUser(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadCurrentUser()
+  }, [getToken])
+
+  if (loading) {
+    return <p>Loading dashboard...</p>
+  }
+
+  if (error) {
+    return <p>Failed to load user: {error}</p>
+  }
+
   return (
     <main>
       <h1>Siamese Dashboard</h1>
@@ -68,8 +115,10 @@ function Dashboard() {
 
       <UserButton />
 
-      <br />
-      <br />
+      <h2>Your Account</h2>
+
+      <p>Siamese User ID: {user.id}</p>
+      <p>Clerk User ID: {user.clerkUserId}</p>
 
       <SignOutButton>
         <button type="button">Log out</button>
